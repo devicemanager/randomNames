@@ -1,4 +1,4 @@
-#Generate random names for testing purposes
+# Generate random names for testing purposes
 
 I have created a small project from the data that grabs names from wiktionary, there are quite some resources like:
 
