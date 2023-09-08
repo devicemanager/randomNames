@@ -1,0 +1,48 @@
+{
+  "dependencies": {
+    "better-sqlite3": "^8.6.0",
+    "csvtojson": "^2.0.10",
+    "fodselsnummer-generator": "^1.0.0",
+    "math": "^0.0.3",
+    "moment": "^2.29.4",
+    "sqlite3": "^5.1.6"
+  },
+  "name": "randomnames",
+  "description": "I have created a small project from the data that grabs names from wiktionary, there are quite some resources like:",
+  "version": "1.0.0",
+  "main": "Names.js",
+  "scripts": {
+    "test": "node Names.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devicemanager/randomNames.git"
+  },
+  "keywords": [
+    "java",
+    "shell",
+    "bash",
+    "sql",
+    "js",
+    "javascript",
+    "ssn",
+    "norwegian",
+    "names",
+    "female",
+    "male",
+    "surname",
+    "sex",
+    "wiktionary",
+    "sqlite",
+    "sqlite3",
+    "node",
+    "name",
+    "picker"
+  ],
+  "author": "René Geers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devicemanager/randomNames/issues"
+  },
+  "homepage": "https://github.com/devicemanager/randomNames#readme"
+}
