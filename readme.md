@@ -101,6 +101,56 @@ unresponsive, since so many transactions queued up to the database. We then used
 the performance increased by magnitudes. The ```node ssndb.js > ssndb.txt``` finished in a couple of hours, while the 
 ```ssh.sh``` script was running for a week (with some hibernates from my machine) and was not finished when I needed to restart.
 
+If you like to try a challenge and improve the bad performing script, you could try to copy this code (WARNING! It will eat all your memory):
+```
+const sql = require('sqlite3').verbose()
+const moment = require('moment')
+const math = require('math')
+const generator = require('fodselsnummer-generator')
+var date
+var numbers
+var row
+const gender = [ 'm', 'f']
+
+function ssn() {
+
+	var db = new sql.Database('ssn.db', sql.OPEN_READWRITE, (err) => {
+		if (err) {
+			console.log("Getting error " + err);
+			exit(1);
+		}
+	});
+
+	for (i=1; i< 11538; i++) {
+		date = moment(new Date(+(new Date()) - Math.floor(i*1000*24*3600))).format('YYYY-MM-DD');
+		console.log(i, date);
+		for ( const person of gender) {
+			numbers = generator.generate(date, person);
+			for (j=1; j<numbers.length; j++) {
+				row = getRndDb(db, numbers[j],person);
+			};
+		};
+	};
+
+}
+
+function getRndDb(db, ssn, sex){
+
+	if (sex=='f') {
+		row = db.get("select female,surname from (select female from females order by random() limit 1) join (select surname from surnames order by random() limit 1);", (err, row) => { 
+			console.log(ssn + ',' + sex + ',' + row.female + ',' + row.surname)
+		})
+	} else {
+		row = db.get("select male,surname from (select male from males order by random() limit 1) join (select surname from surnames order by random() limit 1);", (err, row) => { 
+			console.log(ssn + ',' + sex + ',' + row.male + ',' + row.surname)
+		})
+	}
+
+}
+
+ssn();
+```
+
 The ```femaleNames.js``` file can be recreated by the command:
 ```
 ./node_modules/csvtojson/bin/csvtojson --headers='["femaleName"]' Female_given_names.txt | jq
