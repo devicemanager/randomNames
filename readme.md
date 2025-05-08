@@ -1,5 +1,7 @@
 # Random Names Generator
 
+[![Tests](https://github.com/devicemanager/randomNames/actions/workflows/tests.yml/badge.svg)](https://github.com/devicemanager/randomNames/actions/workflows/tests.yml)
+
 A Node.js project that generates random names from Wiktionary data, with support for Norwegian SSN generation.
 
 ## Project Structure
