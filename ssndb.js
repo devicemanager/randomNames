@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 const generator = require('fodselsnummer-generator');
 
-const DAYS = 12000;
+const DAYS = Number(process.env.SSN_DAYS) || 12000;
 const DAY_MS = 24 * 3600 * 1000;
 const genders = ['m', 'f'];
 
@@ -11,6 +11,11 @@ function loadColumn(db, table, column) {
 
 function pick(list) {
     return list[Math.floor(Math.random() * list.length)];
+}
+
+// fodselsnummer-generator 1.0.0 returns odd (male) numbers for 'f'; digit 9 odd = male.
+function sexOf(ssn) {
+    return Number(ssn[8]) % 2 === 1 ? 'm' : 'f';
 }
 
 function ssn() {
@@ -33,7 +38,7 @@ function ssn() {
     for (let i = 1; i < DAYS; i++) {
         const date = new Date(now - i * DAY_MS).toISOString().slice(0, 10);
         for (const sex of genders) {
-            const numbers = generator.generate(date, sex);
+            const numbers = generator.generate(date, sex).filter((n) => sexOf(n) === sex);
             for (const number of numbers) {
                 console.log(number + ',' + sex + ',' + pick(firstNames[sex]) + ',' + pick(surnames));
             }

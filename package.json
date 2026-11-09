@@ -11,7 +11,7 @@
   "version": "1.0.0",
   "main": "Names.js",
   "scripts": {
-    "test": "node Names.js"
+    "test": "node --test test/"
   },
   "repository": {
     "type": "git",
