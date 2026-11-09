@@ -151,9 +151,9 @@ function getRndDb(db, ssn, sex){
 ssn();
 ```
 
-The ```femaleNames.js``` file can be recreated by the command:
+The ```femaleNames.json``` file can be recreated by the command:
 ```
-./node_modules/csvtojson/bin/csvtojson --headers='["femaleName"]' Female_given_names.txt | jq
+jq -R '{femaleName: .}' Female_given_names.txt | jq -s . > femaleNames.json
 ```
 
 I hope you find this project useful an if you do I would like to get some feedback on how you use this and also 
