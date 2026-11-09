@@ -62,12 +62,14 @@ test('ssndb.js emits unique, valid SSNs matching sex, including the first number
     for (let i = 1; i < 4; i++) {
         const date = new Date(now - i * 24 * 3600 * 1000).toISOString().slice(0, 10);
         for (const sex of ['m', 'f']) {
-            const numbers = generator.generate(date, sex).filter((n) => sexOf(n) === sex);
+            const numbers = generator.generate(date).filter((n) => sexOf(n) === sex);
             expected += numbers.length;
             assert.ok(seen.has(numbers[0]), `first SSN ${numbers[0]} for ${date}/${sex} missing`);
         }
     }
     assert.strictEqual(lines.length, expected);
+    const males = lines.filter((line) => line.split(',')[1] === 'm').length;
+    assert.ok(Math.abs(males - (lines.length - males)) <= lines.length * 0.05, `unbalanced: ${males} m of ${lines.length}`);
 });
 
 test('femaleNames.json matches Female_given_names.txt', () => {

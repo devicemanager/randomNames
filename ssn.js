@@ -2,8 +2,8 @@ const Database = require('better-sqlite3');
 const generator = require('fodselsnummer-generator');
 
 const date = new Date(Date.now() - Math.floor(Math.random() * 1e12)).toISOString().slice(0, 10);
-// fodselsnummer-generator 1.0.0 returns odd (male) numbers for 'f'; digit 9 odd = male.
-const numbers = generator.generate(date, 'f').filter((n) => Number(n[8]) % 2 === 0);
+// fodselsnummer-generator 1.0.0 mislabels and skips numbers for 'f'; generate all and filter on digit 9 (odd = male).
+const numbers = generator.generate(date).filter((n) => Number(n[8]) % 2 === 0);
 const rnd = Math.floor(Math.random() * numbers.length);
 
 let db;

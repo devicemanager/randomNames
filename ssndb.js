@@ -13,7 +13,7 @@ function pick(list) {
     return list[Math.floor(Math.random() * list.length)];
 }
 
-// fodselsnummer-generator 1.0.0 returns odd (male) numbers for 'f'; digit 9 odd = male.
+// fodselsnummer-generator 1.0.0 mislabels and skips numbers for 'f'; generate all and filter on digit 9 (odd = male).
 function sexOf(ssn) {
     return Number(ssn[8]) % 2 === 1 ? 'm' : 'f';
 }
@@ -38,7 +38,7 @@ function ssn() {
     for (let i = 1; i < DAYS; i++) {
         const date = new Date(now - i * DAY_MS).toISOString().slice(0, 10);
         for (const sex of genders) {
-            const numbers = generator.generate(date, sex).filter((n) => sexOf(n) === sex);
+            const numbers = generator.generate(date).filter((n) => sexOf(n) === sex);
             for (const number of numbers) {
                 console.log(number + ',' + sex + ',' + pick(firstNames[sex]) + ',' + pick(surnames));
             }
