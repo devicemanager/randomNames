@@ -1,11 +1,8 @@
 {
   "dependencies": {
-    "better-sqlite3": "^8.6.0",
+    "better-sqlite3": "^13.0.3",
     "csvtojson": "^2.0.10",
-    "fodselsnummer-generator": "^1.0.0",
-    "math": "^0.0.3",
-    "moment": "^2.29.4",
-    "sqlite3": "^5.1.6"
+    "fodselsnummer-generator": "^1.0.0"
   },
   "name": "randomnames",
   "description": "I have created a small project from the data that grabs names from wiktionary, there are quite some resources like:",

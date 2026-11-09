@@ -1,20 +1,23 @@
-const sql = require('sqlite3');
-const moment = require('moment');
-const math = require('math')
+const Database = require('better-sqlite3');
 const generator = require('fodselsnummer-generator');
-var date = moment(new Date(+(new Date()) - Math.floor(Math.random()*1e+12))).format('YYYY-MM-DD');
-var numbers = generator.generate(date, 'f');
-var rnd=math.floor(math.random()*numbers.length);
-var db = new sql.Database('Names.db', sql.OPEN_READWRITE, (err) => {
-    if (err) {
-            console.log("Getting error " + err);
-            exit(1);
-    };
-});
 
-db.all(`select female,surname from (select female from females order by random() limit 1) join (select surname from surnames order by random() limit 1);
-  `, (err, rows) => {
-        rows.forEach(row => {
-            console.log(numbers[rnd]+ ', ' + row.female +', '+row.surname);
-        });
-  });
+const date = new Date(Date.now() - Math.floor(Math.random() * 1e12)).toISOString().slice(0, 10);
+const numbers = generator.generate(date, 'f');
+const rnd = Math.floor(Math.random() * numbers.length);
+
+let db;
+try {
+    db = new Database('names.db', { readonly: true, fileMustExist: true });
+} catch (err) {
+    console.error('Getting error ' + err);
+    process.exit(1);
+}
+
+const row = db.prepare(`
+select female, surname
+from (select female from females order by random() limit 1)
+join (select surname from surnames order by random() limit 1);
+`).get();
+
+console.log(numbers[rnd] + ', ' + row.female + ', ' + row.surname);
+db.close();

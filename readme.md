@@ -32,7 +32,7 @@ The import of the different tables was also very simple:
 
 A few examples:
 ```
-sqlite names.db "select male from males order by random() limit 1;"
+sqlite3 names.db "select male from males order by random() limit 1;"
 ```
 ```
 sqlite3 names.db "select female from females order by random() limit 1;"
@@ -93,13 +93,13 @@ Right now working on javascript to enable creation of random names. For this you
 machine. Node.js uses npm to handle packages. Nvm is a virtual package manager that allows for different package 
 configurations for different projects. I won't go into this here. 
 
-The ```names.js``` script uses a sqlite3 database and emits a random name to stdout. The script ```ssn.js``` adds a field ssn, which
+The ```Names.js``` script uses a sqlite3 database and emits a random name to stdout. The script ```ssn.js``` adds a field ssn, which
 is a Norwegian SSN. It would emit the entire Norwegian population, but you can see there is a potential problem with duplicate
 SSNs in that script. This problem is addressed in ```ssndb.js```, and it started with the reactive db-driver for sqlite3. 
 This was creating massive queue to sqlite3 and callbacks were being stacked up to the database, making the script 
 unresponsive, since so many transactions queued up to the database. We then used the synchronous ```better-sqlite3``` driver,
 the performance increased by magnitudes. The ```node ssndb.js > ssndb.txt``` finished in a couple of hours, while the 
-```ssh.sh``` script was running for a week (with some hibernates from my machine) and was not finished when I needed to restart.
+```ssn.sh``` script was running for a week (with some hibernates from my machine) and was not finished when I needed to restart.
 
 If you like to try a challenge and improve the bad performing script, you could try to copy this code (WARNING! It will eat all your memory):
 ```

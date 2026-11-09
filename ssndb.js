@@ -1,35 +1,43 @@
-const sql = require('better-sqlite3')
-const moment = require('moment')
-const math = require('math')
-const generator = require('fodselsnummer-generator')
-var date
-var numbers
-var row
-const gender = [ 'm', 'f']
+const Database = require('better-sqlite3');
+const generator = require('fodselsnummer-generator');
+
+const DAYS = 12000;
+const DAY_MS = 24 * 3600 * 1000;
+const genders = ['m', 'f'];
+
+function loadColumn(db, table, column) {
+    return db.prepare(`select ${column} from ${table}`).pluck().all();
+}
+
+function pick(list) {
+    return list[Math.floor(Math.random() * list.length)];
+}
 
 function ssn() {
-
-    const db = require('better-sqlite3')('ssn.db', sql.OPEN_READWRITE);
-    db.pragma('journal_mode = WAL');
-    for (i=1; i< 12000; i++) {
-      date = moment(new Date(+(new Date()) - Math.floor(i*1000*24*3600))).format('YYYY-MM-DD');
-      //console.log(i, date);
-      for ( const person of gender) {
-        numbers = generator.generate(date, person);
-        for (j=1; j<numbers.length; j++) {
-          row = getRndDb(db, numbers[j],person);
-        }
-      }
+    let db;
+    try {
+        db = new Database('ssn.db', { readonly: true, fileMustExist: true });
+    } catch (err) {
+        console.error('Getting error ' + err);
+        process.exit(1);
     }
-}
-function getRndDb(db, ssn, sex){
 
-    if (sex=='f') {
-        const row = db.prepare("select female,surname from (select female from females order by random() limit 1) join     (select surname from surnames order by random() limit 1);").get();
-        console.log(ssn + ',' + sex + ',' + row.female + ',' + row.surname);
-    } else {
-        const row = db.prepare("select male, surname from (select male from males order by random() limit 1) join (select surname from surnames order by random() limit 1);").get();
-        console.log(ssn + ',' + sex + ',' + row.male + ',' + row.surname);
+    const firstNames = {
+        m: loadColumn(db, 'males', 'male'),
+        f: loadColumn(db, 'females', 'female'),
+    };
+    const surnames = loadColumn(db, 'surnames', 'surname');
+    db.close();
+
+    const now = Date.now();
+    for (let i = 1; i < DAYS; i++) {
+        const date = new Date(now - i * DAY_MS).toISOString().slice(0, 10);
+        for (const sex of genders) {
+            const numbers = generator.generate(date, sex);
+            for (const number of numbers) {
+                console.log(number + ',' + sex + ',' + pick(firstNames[sex]) + ',' + pick(surnames));
+            }
+        }
     }
 }
 

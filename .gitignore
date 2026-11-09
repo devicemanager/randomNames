@@ -1,2 +1,7 @@
 *.class
 *gz
+*.iml
+node_modules/
+ssndb.txt
+*.db-wal
+*.db-shm
