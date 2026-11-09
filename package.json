@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "better-sqlite3": "^13.0.3",
-    "csvtojson": "^2.0.10",
+    "csvtojson": "^2.0.13",
     "fodselsnummer-generator": "^1.0.0"
   },
   "name": "randomnames",
